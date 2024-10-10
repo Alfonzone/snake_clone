@@ -1,0 +1,141 @@
+[gd_scene load_steps=11 format=3 uid="uid://cts3dqnsghs3u"]
+
+[ext_resource type="Script" path="res://scenes/tests/snake_movement/controller.gd" id="1_8m78d"]
+[ext_resource type="PackedScene" uid="uid://dr7yhq0exnbnt" path="res://scenes/floor/floor.tscn" id="2_7pm1a"]
+[ext_resource type="PackedScene" uid="uid://cgygmxveqff8" path="res://scenes/snake/snake_head.tscn" id="3_oym2x"]
+[ext_resource type="PackedScene" uid="uid://dautie854b84f" path="res://scenes/snake/snake_body.tscn" id="4_2ohgu"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_lgvor"]
+font_size = 12
+
+[sub_resource type="LabelSettings" id="LabelSettings_l2lew"]
+font_size = 8
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_mhwcb"]
+normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_efuot"]
+normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hq7y4"]
+normal = Vector2(-1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_twx2d"]
+
+[node name="Level" type="Node2D"]
+script = ExtResource("1_8m78d")
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="UILayer/Control"]
+modulate = Color(1, 1, 1, 0.498039)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="GameOverMenu" type="ColorRect" parent="UILayer/Control"]
+process_mode = 2
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -56.0
+offset_top = -24.0
+offset_right = 56.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.545059, 0.545059, 1.34766e-06, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/Control/GameOverMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="UILayer/Control/GameOverMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Game Over"
+label_settings = SubResource("LabelSettings_lgvor")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="UILayer/Control/GameOverMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Your score: 0"
+label_settings = SubResource("LabelSettings_l2lew")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RetryButton" type="Button" parent="UILayer/Control/GameOverMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 8
+text = "Retry"
+
+[node name="TileMap" parent="." instance=ExtResource("2_7pm1a")]
+
+[node name="SnakeHolder" type="Node2D" parent="."]
+
+[node name="SnakeHead" parent="SnakeHolder" instance=ExtResource("3_oym2x")]
+position = Vector2(152, 120)
+
+[node name="SnakeBody" parent="SnakeHolder" node_paths=PackedStringArray("following") instance=ExtResource("4_2ohgu")]
+position = Vector2(152, 136)
+following = NodePath("../SnakeHead")
+
+[node name="SnakeBody2" parent="SnakeHolder" node_paths=PackedStringArray("following") instance=ExtResource("4_2ohgu")]
+position = Vector2(152, 152)
+following = NodePath("../SnakeBody")
+is_tail = true
+
+[node name="EdgeWest" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EdgeWest"]
+shape = SubResource("WorldBoundaryShape2D_mhwcb")
+
+[node name="EdgeNorth" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EdgeNorth"]
+shape = SubResource("WorldBoundaryShape2D_efuot")
+
+[node name="Area2D3" type="Area2D" parent="."]
+position = Vector2(256, 192)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D3"]
+shape = SubResource("WorldBoundaryShape2D_hq7y4")
+
+[node name="Area2D4" type="Area2D" parent="."]
+position = Vector2(0, 192)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D4"]
+shape = SubResource("WorldBoundaryShape2D_twx2d")
+
+[connection signal="pressed" from="UILayer/Control/GameOverMenu/VBoxContainer/RetryButton" to="." method="_on_retry_button_pressed"]
+[connection signal="ate_egg" from="SnakeHolder/SnakeHead" to="." method="_on_snake_head_ate_egg"]
+[connection signal="hit_wall" from="SnakeHolder/SnakeHead" to="." method="_on_snake_head_hit_wall"]
+[connection signal="spawning_tail" from="SnakeHolder/SnakeBody2" to="." method="spawn_new_snake_tail"]

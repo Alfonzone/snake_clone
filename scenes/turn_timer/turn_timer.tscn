@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://b6twc05x6utms"]
+
+[node name="TurnTimer" type="Timer"]
+wait_time = 0.3
+autostart = true

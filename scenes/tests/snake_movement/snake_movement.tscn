@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://cvjan042geqbn"]
+
+[ext_resource type="Script" path="res://scenes/tests/snake_movement/controller.gd" id="1_a2b06"]
+[ext_resource type="PackedScene" uid="uid://cgygmxveqff8" path="res://scenes/snake/snake_head.tscn" id="1_q2rcn"]
+[ext_resource type="PackedScene" uid="uid://dautie854b84f" path="res://scenes/snake/snake_body.tscn" id="2_4yoxr"]
+[ext_resource type="PackedScene" uid="uid://besf4uttr1frj" path="res://scenes/food/egg.tscn" id="3_kiwut"]
+
+[node name="Node2D" type="Node2D"]
+position = Vector2(8, 8)
+script = ExtResource("1_a2b06")
+
+[node name="Egg" parent="." instance=ExtResource("3_kiwut")]
+position = Vector2(64, 48)
+
+[node name="SnakeHolder" type="Node2D" parent="."]
+
+[node name="SnakeHead" parent="SnakeHolder" instance=ExtResource("1_q2rcn")]
+position = Vector2(112, 80)
+
+[node name="SnakeBody" parent="SnakeHolder" node_paths=PackedStringArray("following") instance=ExtResource("2_4yoxr")]
+position = Vector2(112, 96)
+following = NodePath("../SnakeHead")
+
+[node name="SnakeBody2" parent="SnakeHolder" node_paths=PackedStringArray("following") instance=ExtResource("2_4yoxr")]
+position = Vector2(112, 112)
+following = NodePath("../SnakeBody")
+
+[node name="SnakeBody3" parent="SnakeHolder" node_paths=PackedStringArray("following") instance=ExtResource("2_4yoxr")]
+position = Vector2(112, 128)
+following = NodePath("../SnakeBody2")
+is_tail = true
+
+[connection signal="spawning_tail" from="SnakeHolder/SnakeBody3" to="." method="spawn_new_snake_tail"]
