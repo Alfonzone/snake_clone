@@ -14,11 +14,12 @@ signal hit_wall
 ## The length (in pixels) of a step.
 const STEP_LENGTH := 16
 ## The duration of a step animation.
-const MOVEMENT_DURATION := 0.3
+var movement_duration := 0.2
 
 ## The direction to which the next step will be taken.
 var next_step_direction := Vector2.UP
 @onready var _sprite: Sprite2D = $Sprite2D
+## The direction at which the next body part will be placed.
 var next_body_direction := Vector2.DOWN
 ## Whether the head has just eaten an egg.
 var has_egg := false
@@ -55,7 +56,7 @@ func move() -> void:
 		self.has_egg = false
 		var scale_tween := self.create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 		scale_tween.tween_property(self._sprite, "scale", Vector2(1, 1), 0.3)
-	tween.tween_property(self, "position", self.position + position_delta, MOVEMENT_DURATION)
+	tween.tween_property(self, "position", self.position + position_delta, movement_duration)
 
 
 func _on_turn_timer_timeout() -> void:

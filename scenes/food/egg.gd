@@ -15,6 +15,7 @@ func _ready() -> void:
 
 
 func _on_area_entered(_area: Area2D) -> void:
+	set_deferred("monitoring", false)
 	self.eaten.emit()
 	var tween := create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BOUNCE)
 	tween.tween_property(self, "scale", Vector2.ZERO, 0.3)

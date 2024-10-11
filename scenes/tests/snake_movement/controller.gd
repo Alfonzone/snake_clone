@@ -15,7 +15,7 @@ const GRID_TILE_HEIGHT := 12
 @onready var score_label: Label = $UILayer/Control/Label
 @onready var game_over_menu: Control = $UILayer/Control/GameOverMenu
 @onready var game_over_score_label: Label = $UILayer/Control/GameOverMenu/VBoxContainer/ScoreLabel
-var score := 0
+var score := 0  ## The player's score. Increases when the snake eats an egg.
 
 
 func _ready() -> void:
@@ -69,6 +69,10 @@ func get_free_positions() -> Array[Vector2i]:
 
 
 func _start_game() -> void:
+	$SnakeHolder/SnakeHead.movement_duration = TurnTimer.wait_time
+	$SnakeHolder/SnakeBody.movement_duration = TurnTimer.wait_time
+	$SnakeHolder/SnakeBody2.movement_duration = TurnTimer.wait_time
+	TurnTimer.start()
 	get_tree().paused = false
 
 
@@ -79,9 +83,14 @@ func _on_snake_head_ate_egg() -> void:
 
 func _on_snake_head_hit_wall() -> void:
 	get_tree().paused = true
+	TurnTimer.stop()
 	game_over_menu.visible = true
 	game_over_score_label.text = "Your score: %s" % score
 
 
 func _on_retry_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/level/level.tscn")
+
+
+func _on_main_menu_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn")

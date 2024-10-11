@@ -17,6 +17,8 @@ signal spawning_tail(new_tail, old_tail)
 var next_step_position: Vector2
 ## Whether the body part is currently digesting an egg.
 var has_egg := false
+## The duration of a step animation.
+var movement_duration: float
 
 
 func _ready() -> void:
@@ -37,16 +39,16 @@ func move() -> void:
 	if self.following.has_egg:
 		self.has_egg = true
 		var scale_tween := self.create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-		scale_tween.tween_property($Sprite2D, "scale", Vector2(1.2, 1.2), 0.3)
+		scale_tween.tween_property($Sprite2D, "scale", Vector2(1.2, 1.2), movement_duration)
 	elif self.has_egg:
 		self.has_egg = false
 		var scale_tween := self.create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-		scale_tween.tween_property($Sprite2D, "scale", Vector2(1, 1), 0.3)
+		scale_tween.tween_property($Sprite2D, "scale", Vector2(1, 1), movement_duration)
 		if self.is_tail:
 			self.spawn_new_tail()
 	
 	var tween := self.create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	tween.tween_property(self, "position", self.next_step_position, SnakeHead.MOVEMENT_DURATION)
+	tween.tween_property(self, "position", self.next_step_position, movement_duration)
 
 
 ## Spawns a new tail that will follow this body part.
@@ -55,6 +57,7 @@ func spawn_new_tail() -> void:
 	new_tail.position = self.position
 	new_tail.is_tail = true
 	new_tail.following = self
+	new_tail.movement_duration = movement_duration
 	self.spawning_tail.emit(new_tail, self)
 
 

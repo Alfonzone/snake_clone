@@ -2,4 +2,3 @@
 
 [node name="TurnTimer" type="Timer"]
 wait_time = 0.3
-autostart = true
