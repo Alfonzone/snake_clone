@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bl0xy037fyfva"]
+[gd_scene load_steps=6 format=3 uid="uid://bl0xy037fyfva"]
 
 [ext_resource type="Script" path="res://scenes/main_menu/main_menu.gd" id="1_qwb1g"]
 
@@ -12,6 +12,10 @@ font_color = Color(0.294118, 0.45098, 0.294118, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_duvl3"]
 font_size = 8
 font_color = Color(0.150244, 0.490646, 9.62615e-07, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_lqe2d"]
+font_size = 10
+font_color = Color(0.294118, 0.45098, 0.294118, 1)
 
 [node name="MainMenu" type="ColorRect"]
 process_mode = 3
@@ -83,6 +87,21 @@ size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.419608, 1, 0.239216, 1)
 text = "Quit"
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -8.0
+offset_top = 40.0
+offset_right = 93.0
+offset_bottom = 63.0
+grow_horizontal = 2
+text = "By Alfonzone"
+label_settings = SubResource("LabelSettings_lqe2d")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="value_changed" from="HBoxContainer/VBoxContainer/DifficultySlider" to="." method="_on_h_slider_value_changed"]
